@@ -15,4 +15,4 @@ WORKDIR /flask/
 
 EXPOSE 5000
 
-CMD ["python3","app.py"]
+CMD ["python3","web.py"]
