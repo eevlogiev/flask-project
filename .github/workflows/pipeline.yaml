@@ -15,7 +15,13 @@
           runs-on: ubuntu-latest
      
           steps:
-          # Check out the code
+
+            # Get Short Git commit SHA
+          - name: Set short git commit SHA
+            id: commit
+            uses: prompt/actions-commit-hash@v2
+          
+            # Check out the code
           - name: Check out code
             uses: actions/checkout@v4
             
@@ -31,15 +37,13 @@
           - name: Login to Amazon ECR
             id: login-ecr
             uses: aws-actions/amazon-ecr-login@v2
-  
-          - name: Get short SHA
-            run: echo "SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_ENV
+
           # Build, tag, and push Docker image to Amazon ECR
           - name: Build, tag, and push image to Amazon ECR
             env:
               ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
               ECR_REPOSITORY: ${{ env.APP_NAME }}
-              IMAGE_TAG: ${{ env.SHORT_SHA }}
+              IMAGE_TAG: ${{ steps.commit.outputs.short }}
             run: |
               docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
               docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
