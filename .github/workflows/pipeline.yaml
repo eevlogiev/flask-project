@@ -62,6 +62,6 @@
         
           - name: Deploy to EKS
             run: |
-            kubectl apply -f deployment.yaml
-            kubectl apply -f service.yaml
+              kubectl apply -f deployment.yaml
+              kubectl apply -f service.yaml
 #            helm upgrade flask-app ./helm/ --atomic --wait --install --namespace prod --set deployment.tag=$GIT_COMMIT --create-namespace --set deployment.env=prod 
