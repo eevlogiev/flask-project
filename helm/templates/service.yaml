@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ .Values.deployment.name }}-svc"
+spec:
+  selector:
+    app: {{ .Values.deployment.name }}
+  ports:
+    - protocol: TCP
+      port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.targetport }}
+   #   nodePort: {{ .Values.service.nodeport }}
+  #type: LoadBalancer #we use NGINX-ingress instead

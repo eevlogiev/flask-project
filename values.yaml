@@ -1,0 +1,10 @@
+deployment:
+    name: flask-app
+    image: flask
+    tag: latest
+    replicas: 2
+    port: 80
+    env: dev
+
+service:
+    port: 5000
