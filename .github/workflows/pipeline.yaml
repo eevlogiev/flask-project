@@ -63,7 +63,7 @@ jobs:
         - name: Update kube config
           env:
             EKS_CLUSTER: "flask-cluster"
-            AWS_REGION: ${{ env.AWS_REGION }}
+            AWS_REGION: ${{ vars.AWS_REGION }}
           run: aws eks update-kubeconfig --name $EKS_CLUSTER --region $AWS_REGION
         
         - name: Deploy to EKS
