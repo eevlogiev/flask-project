@@ -24,9 +24,6 @@ jobs:
             # Check out the code
         - name: Check out code
           uses: actions/checkout@v4
-            
-        - name: test env variable
-          run: echo "AWS region is ${{ env.AWS_REGION }}"
 
         # Configure AWS credentials for authentication
         - name: Configure AWS credentials
@@ -57,8 +54,8 @@ jobs:
         - name: Update kube config
           run: aws eks update-kubeconfig --name flask-cluster --region ${{ vars.AWS_REGION }}
         
-        - name: Deploy to EKS
-          run: |
-            kubectl apply -f deployment.yaml
-            kubectl apply -f service.yaml
+#        - name: Deploy to EKS
+#          run: |
+#            kubectl apply -f deployment.yaml
+#            kubectl apply -f service.yaml
 #           helm upgrade flask-app ./helm/ --atomic --wait --install --namespace prod --set deployment.tag=$GIT_COMMIT --create-namespace --set deployment.env=prod 

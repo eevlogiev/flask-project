@@ -18,6 +18,6 @@ spec:
     spec:
       containers:
       - name: flask
-        image: "991695665332.dkr.ecr.us-east-1.amazonaws.com/flask:f87f944"
+        image: "623479528468.dkr.ecr.us-east-1.amazonaws.com/flask:f87f944"
         ports:
         - containerPort: 80

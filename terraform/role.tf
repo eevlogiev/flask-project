@@ -26,10 +26,10 @@ resource "aws_iam_role_policy_attachment" "admin-role-policy-attach" {
   policy_arn = data.aws_iam_policy.admin_access.arn
 }
 
-resource "aws_iam_instance_profile" "profile" {
-  name = "${local.name}-profile"
-  role = aws_iam_role.role.name
-}
+#resource "aws_iam_instance_profile" "profile" {
+#  name = "${local.name}-profile"
+#  role = aws_iam_role.role.name
+#}
 
 resource "aws_iam_role" "role2" {
   name               = "eks-role"
@@ -40,7 +40,7 @@ resource "aws_iam_role" "role2" {
    {
      "Action": "sts:AssumeRole",
      "Principal": {
-       "AWS": "arn:aws:iam::991695665332:root"
+       "AWS": "arn:aws:iam::623479528468:root"
      },
      "Effect": "Allow" 
    }
