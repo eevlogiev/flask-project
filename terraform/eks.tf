@@ -61,7 +61,7 @@ module "eks" {
 module "cert_manager_irsa_role" {
   source     = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   depends_on = [module.eks]
-  version    = "v5.11.2"
+  version    = "v5.33.0"
 
   role_name                  = "cert-manager"
   attach_cert_manager_policy = true
@@ -79,7 +79,7 @@ module "cert_manager_irsa_role" {
 module "external_dns_irsa_role" {
   source     = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   depends_on = [module.eks]
-  version    = "v5.11.2"
+  version    = "v5.33.0"
 
   role_name                  = "external-dns"
   attach_external_dns_policy = true

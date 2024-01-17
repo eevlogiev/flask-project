@@ -1,20 +1,28 @@
 #!/usr/bin/python
 
 from flask import Flask
-from flask import render_template
 import os
 
 app = Flask(__name__)
 
-env=os.getenv('ENV')
+env = os.getenv('ENV')
 
 @app.route("/")
 def home():
-    return f"Hello, you are connected to {env} environment"
-
-@app.route("/picture")
-def pic():
-    return render_template('index.html')
+    return f"""
+    <html>
+    <head>
+        <title>Flask App</title>
+    </head>
+    <body>
+        <center>
+            <h3>Hello, DevOps Gurus!<br>
+                You are connected to {env} environment.</h3>
+            <img border="0" src="/static/devops.png" alt="devops" width="1000" height="500" align="middle"/>
+        </center>
+    </body>
+    </html>
+    """
 
 if __name__ == "__main__":
-    app.run(port=os.environ.get("PORT", 5000), host="0.0.0.0")
+    app.run(port=5000, host="0.0.0.0")
