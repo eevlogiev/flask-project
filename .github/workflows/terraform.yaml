@@ -32,10 +32,13 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ vars.AWS_REGION }}
-          
+
       - name: terraform plan
         uses: dflook/terraform-plan@v1
         with:
           path: terraform
 
-      
+      - name: terraform apply
+        uses: dflook/terraform-apply@v1
+        with:
+          path: terraform
