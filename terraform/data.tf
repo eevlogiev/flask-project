@@ -1,4 +1,4 @@
-data "aws_ami" "amazon-linux-2023" {
+/* data "aws_ami" "amazon-linux-2023" {
   most_recent = true
   filter {
     name   = "owner-alias"
@@ -9,7 +9,7 @@ data "aws_ami" "amazon-linux-2023" {
     values = ["al2023-ami-2023*"]
   }
 }
-
+*/
 data "aws_eks_cluster_auth" "default" {
   name = module.eks.cluster_name
 }
