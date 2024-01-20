@@ -3,18 +3,11 @@ kind: Ingress
 metadata:
   name: "{{ .Values.deployment.name }}-ingress"
   annotations:
-   #  alb.ingress.kubernetes.io/group.order: "10"
-   #  alb.ingress.kubernetes.io/healthcheck-interval-seconds: "30"
-   #  alb.ingress.kubernetes.io/healthcheck-path: /
-   #  alb.ingress.kubernetes.io/healty-threshold-count: "1"
-   #  alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 443},{"HTTP": 80}]'
-     #alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
-   #  alb.ingress.kubernetes.io/unhealthy-threshold-count: "3"
-    # kubernetes.io/ingress.class: alb
-     kubernetes.io/ingress.class: nginx
+#     kubernetes.io/ingress.class: nginx
      cert-manager.io/cluster-issuer: "acme-issuer-{{ .Values.deployment.env }}"
    # cert-manager.io/cluster-issuer: acme-issuer
 spec:
+  ingressClassName: nginx
   rules:
     {{- if eq .Values.deployment.env "prod" }}
   - host: "{{ .Values.deployment.domain }}"

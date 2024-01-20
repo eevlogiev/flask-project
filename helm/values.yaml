@@ -1,10 +1,10 @@
 deployment:
     name: flask-app
-    image: 213061564713.dkr.ecr.us-east-1.amazonaws.com/flask
-    tag: latest
+    image: 885065906151.dkr.ecr.us-east-1.amazonaws.com/flask
+    tag: a7ddcab
     replicas: 2
     port: 5000
-    env: dev
+    env: prod
     domain: ev4o.com
     region: us-east-1
 
