@@ -9,6 +9,7 @@
     values = ["al2023-ami-2023*"]
   }
 }
+this is a test
 */
 data "aws_eks_cluster_auth" "default" {
   name = module.eks.cluster_name
