@@ -17,7 +17,7 @@ def home():
     <body>
         <center>
             <h3>Hello, DevOps Gurus!<br>
-                You are connected to {env} environment.</h3>
+                You are connected to <span style="color: red;">{env}</span> environment.</h3>
             <img border="0" src="/static/devops.png" alt="devops" width="1000" height="500" align="middle"/>
         </center>
     </body>

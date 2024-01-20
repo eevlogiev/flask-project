@@ -1,9 +1,9 @@
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
-  version = "~> 19.20"
+  version = "~> 19.21"
 
   cluster_name    = "${local.name}-cluster"
-  cluster_version = "1.27"
+  cluster_version = "1.28"
   vpc_id          = module.vpc.vpc_id
   subnet_ids      = module.vpc.public_subnets
   enable_irsa     = true
@@ -62,7 +62,6 @@ module "cert_manager_irsa_role" {
   source     = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   depends_on = [module.eks]
   version    = "v5.33.0"
-
   role_name                  = "cert-manager"
   attach_cert_manager_policy = true
   #  cert_manager_hosted_zone_arns = ["arn:aws:route53:::hostedzone/Z01277618FMVX82FWZB2"]
@@ -80,7 +79,6 @@ module "external_dns_irsa_role" {
   source     = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   depends_on = [module.eks]
   version    = "v5.33.0"
-
   role_name                  = "external-dns"
   attach_external_dns_policy = true
   #  external_dns_hosted_zone_arns = ["arn:aws:route53:::hostedzone/Z01277618FMVX82FWZB2"]
