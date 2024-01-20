@@ -1,0 +1,34 @@
+name: "Terraform Infrastructure Change Management Pipeline"
+
+on:
+    push:
+      branches:
+      - terraform
+      paths:
+      - terraform/**
+    pull_request:
+      branches:
+      - terraform
+      paths:
+      - terraform/**
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    name: Create terraform plan
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}            
+    steps:
+      - name: Checkout the repository to the runner
+        uses: actions/checkout@v4
+
+      - name: terraform plan
+        uses: dflook/terraform-plan@v1
+        with:
+          path: terraform
+
+      
