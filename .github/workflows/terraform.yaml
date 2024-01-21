@@ -25,7 +25,7 @@ jobs:
     steps:
       - name: Checkout the repository to the runner
         uses: actions/checkout@v4
-        
+
       - name: Use GITHUB_TOKEN
         run: |
           # Use secrets.GITHUB_TOKEN for GitHub API interactions
@@ -39,11 +39,11 @@ jobs:
           aws-region: ${{ vars.AWS_REGION }}
 
       - name: terraform plan
-        uses: dflook/terraform-plan@v1
+        uses: dflook/terraform-plan@v1.41.1
         with:
           path: terraform
 
       - name: terraform apply
-        uses: dflook/terraform-apply@v1
+        uses: dflook/terraform-apply@v1.41.1
         with:
           path: terraform
