@@ -4,7 +4,7 @@ name: CI Pipeline
 on:
     push:
       branches:
- #       - '*'
+        - 'test'
  #      - '!main'
     
 jobs:
