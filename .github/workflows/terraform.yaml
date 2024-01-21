@@ -25,6 +25,11 @@ jobs:
     steps:
       - name: Checkout the repository to the runner
         uses: actions/checkout@v4
+        
+      - name: Use GITHUB_TOKEN
+        run: |
+          # Use secrets.GITHUB_TOKEN for GitHub API interactions
+          echo "Using GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}"
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
