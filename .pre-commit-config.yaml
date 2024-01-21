@@ -1,0 +1,40 @@
+# file: .pre-commit-config.yaml
+default_language_version:
+  python: python3.12
+
+default_stages:
+  - commit
+  - push
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: check-executables-have-shebangs
+      - id: check-merge-conflict
+        args:
+          - '--assume-in-merge'
+      - id: check-json
+      - id: check-yaml
+        args:
+          - '--allow-multiple-documents'
+      - id: trailing-whitespace
+
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.83.5
+    hooks:
+      - id: terraform_fmt
+      - id: terraform_validate
+        args:
+          - --tf-init-args=-upgrade
+      - id: terraform_tflint
+        args:
+          - '--args=--config=__GIT_WORKING_DIR__/.tflint.hcl'
+      - id: terraform_providers_lock
+        args:
+          - --hook-config=--mode=only-check-is-current-lockfile-cross-platform
+          - --args=-platform=linux_amd64
+          - --args=-platform=linux_arm64
+          - --args=-platform=darwin_amd64
+          - --args=-platform=darwin_arm64
+
