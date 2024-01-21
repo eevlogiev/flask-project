@@ -7,12 +7,12 @@ on:
       paths:
       - terraform/**
     pull_request:
+      paths:
+        - terraform/**
 permissions:
       contents: read # This is required for actions/checkout
       pull-requests: write # This is required for gh bot to comment PR
-env:
-  TF_LOG: INFO
-  AWS_REGION: ${{ vars.AWS_REGION }}
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -21,6 +21,7 @@ jobs:
         shell: bash
         working-directory: terraform
     steps:
+        # Check out the code
       - name: Git checkout
         uses: actions/checkout@v4
 
