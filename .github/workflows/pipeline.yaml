@@ -58,5 +58,14 @@ jobs:
         - name: Deploy application to EKS
           env:
             IMAGE_TAG: ${{ steps.commit.outputs.short }}
+          if: github.ref == 'refs/heads/main'
           run: |
             helm upgrade flask-app ./helm/ --atomic --wait --install --namespace prod --set deployment.tag=$IMAGE_TAG --create-namespace --set deployment.env=prod
+
+        - name: Deploy application to EKS
+          env:
+            IMAGE_TAG: ${{ steps.commit.outputs.short }}
+          if: github.ref == 'refs/heads/dev'
+          run: |
+            helm upgrade flask-app ./helm/ --atomic --wait --install --namespace dev --set deployment.tag=$IMAGE_TAG --create-namespace --set deployment.env=dev
+
