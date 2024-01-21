@@ -6,10 +6,20 @@ terraform {
     dynamodb_table = "terraform-state"
     encrypt        = true
   }
+
+  required_version = "1.6.6"
   required_providers {
     aws = {
       source  = "hashicorp/aws"
       version = "5.31.0"
+    }
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = "2.25.2"
+    }
+    helm = {
+      source  = "hashicorp/helm"
+      version = "2.12.1"
     }
   }
 }
@@ -31,3 +41,4 @@ provider "helm" {
     token                  = data.aws_eks_cluster_auth.default.token
   }
 }
+

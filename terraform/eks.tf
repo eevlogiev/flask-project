@@ -1,6 +1,5 @@
 module "eks" {
-  source  = "terraform-aws-modules/eks/aws"
-  version = "~> 19.21"
+  source = "./modules/terraform-aws-eks"
 
   cluster_name    = "${local.name}-cluster"
   cluster_version = "1.28"
@@ -27,9 +26,9 @@ module "eks" {
     vpc-cni = {
       most_recent = true
     }
-#    aws-ebs-csi-driver = {
-#      most_recent = true
-#    }
+    #    aws-ebs-csi-driver = {
+    #      most_recent = true
+    #    }
   }
   eks_managed_node_groups = {
     general = {
@@ -59,13 +58,12 @@ module "eks" {
 }
 
 module "cert_manager_irsa_role" {
-  source     = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  depends_on = [module.eks]
-  version    = "v5.33.0"
-  role_name                  = "cert-manager"
-  attach_cert_manager_policy = true
-  #  cert_manager_hosted_zone_arns = ["arn:aws:route53:::hostedzone/Z01277618FMVX82FWZB2"]
-  cert_manager_hosted_zone_arns = ["${aws_route53_zone.main.arn}"]
+  source                        = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  depends_on                    = [module.eks]
+  version                       = "v5.33.0"
+  role_name                     = "cert-manager"
+  attach_cert_manager_policy    = true
+  cert_manager_hosted_zone_arns = [aws_route53_zone.main.arn]
 
   oidc_providers = {
     ex = {
@@ -76,13 +74,12 @@ module "cert_manager_irsa_role" {
 }
 
 module "external_dns_irsa_role" {
-  source     = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  depends_on = [module.eks]
-  version    = "v5.33.0"
-  role_name                  = "external-dns"
-  attach_external_dns_policy = true
-  #  external_dns_hosted_zone_arns = ["arn:aws:route53:::hostedzone/Z01277618FMVX82FWZB2"]
-  external_dns_hosted_zone_arns = ["${aws_route53_zone.main.arn}"]
+  source                        = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  depends_on                    = [module.eks]
+  version                       = "v5.33.0"
+  role_name                     = "external-dns"
+  attach_external_dns_policy    = true
+  external_dns_hosted_zone_arns = [aws_route53_zone.main.arn]
 
   oidc_providers = {
     ex = {
