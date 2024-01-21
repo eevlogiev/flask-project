@@ -41,6 +41,10 @@ jobs:
         id: fmt
         run: terraform fmt -check
         continue-on-error: true
+        
+      - name: Terraform Init
+        id: init
+        run: terraform init
 
       - name: Terraform Validate
         id: validate
@@ -60,6 +64,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+            #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
             #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
             <details><summary>Validation Output</summary>
 
