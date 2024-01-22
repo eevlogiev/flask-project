@@ -15,9 +15,9 @@ repos:
         args:
           - '--assume-in-merge'
       - id: check-json
-#      - id: check-yaml
-#        args:
-#          - '--allow-multiple-documents'
+      - id: check-yaml
+        args:
+          - '--allow-multiple-documents'
       - id: trailing-whitespace
 
   - repo: https://github.com/antonbabenko/pre-commit-terraform
