@@ -40,7 +40,7 @@ repos:
           - '--assume-in-merge'
       - id: check-json
       - id: check-yaml
-        exclude: helm/*
+        exclude: ^helm/
         args:
           - '--allow-multiple-documents'
       - id: trailing-whitespace
