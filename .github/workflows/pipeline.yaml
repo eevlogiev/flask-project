@@ -5,10 +5,10 @@ on:
     push:
       branches:
         - '*'
-      paths:
-        - 'app/**'
-        - 'helm/**'
-        - Dockerfile
+#      paths:
+#        - 'app/**'
+#        - 'helm/**'
+#        - Dockerfile
 
 jobs:
     # Code style checks
