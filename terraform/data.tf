@@ -16,6 +16,8 @@ data "aws_eks_cluster_auth" "default" {
 
 data "aws_caller_identity" "current" {}
 
+data "aws_region" "current" {}
+
 output "account_id" {
   value = data.aws_caller_identity.current.account_id
 }
@@ -23,3 +25,5 @@ output "account_id" {
 output "zone_arn" {
   value = aws_route53_zone.main.arn
 }
+
+

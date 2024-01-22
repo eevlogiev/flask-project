@@ -1,13 +1,13 @@
 ---
 deployment:
   name: flask-app
-  image: 456323302348.dkr.ecr.us-east-1.amazonaws.com/flask
+  image: "${account_id}.dkr.ecr.us-east-1.amazonaws.com/flask"
   tag: latest
   replicas: 2
   port: 5000
   env: prod
   domain: ev4o.com
-  region: us-east-1
+  region: ${region}
 
 service:
   port: 80
