@@ -1,3 +1,4 @@
+---
 # file: .pre-commit-config.yaml
 default_language_version:
   python: python3.12
@@ -7,10 +8,37 @@ default_stages:
   - push
 
 repos:
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.16.1
+    hooks:
+      - id: gitleaks
+        name: Detect hardcoded secrets in repo
+        description: Detect hardcoded secrets using Gitleaks
+        entry: gitleaks protect --verbose --redact --staged
+        pass_filenames: false
+      - id: gitleaks-docker
+        name: Detect hardcoded secrets in Docker image
+        description: Detect hardcoded secrets using Gitleaks
+        entry: zricethezav/gitleaks protect --verbose --redact --staged
+        language: docker_image
+
+  - repo: https://github.com/adrienverge/yamllint.git
+    rev: v1.29.0
+    hooks:
+      - id: yamllint
+        name: Yamllint
+        description: This hook runs yamllint.
+        entry: yamllint
+        language: python
+        types: [file, yaml]
+
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.5.0
     hooks:
       - id: check-executables-have-shebangs
+        name: Check if executrales have shebangs
+      - id: check-added-large-files
+        name: Check for large files
       - id: check-merge-conflict
         args:
           - '--assume-in-merge'
@@ -37,4 +65,3 @@ repos:
           - --args=-platform=linux_arm64
           - --args=-platform=darwin_amd64
           - --args=-platform=darwin_arm64
-
