@@ -38,3 +38,27 @@ repos:
           - --args=-platform=darwin_amd64
           - --args=-platform=darwin_arm64
 
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.16.1
+    hooks:
+      - id: gitleaks
+        name: Detect hardcoded secrets in repo
+        description: Detect hardcoded secrets using Gitleaks
+        entry: gitleaks protect --verbose --redact --staged
+        #language: python
+        pass_filenames: false
+      - id: gitleaks-docker
+        name: Detect hardcoded secrets in Docker image
+        description: Detect hardcoded secrets using Gitleaks
+        entry: zricethezav/gitleaks protect --verbose --redact --staged
+        language: docker_image
+
+  - repo: https://github.com/adrienverge/yamllint.git
+    rev: v1.29.0
+    hooks:
+      - id: yamllint
+        name: yamllint
+        description: This hook runs yamllint.
+        entry: yamllint
+        language: python
+        types: [file, yaml]

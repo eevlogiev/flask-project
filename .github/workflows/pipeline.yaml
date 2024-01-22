@@ -76,7 +76,7 @@ jobs:
             cd app && python test_web.py
 
     Sonarcloud:
-      name: SonarCloud scan
+      name: SonarCloud security scan
       runs-on: ubuntu-latest
       needs: [unit-test]
       steps:
@@ -96,7 +96,7 @@ jobs:
               -Dsonar.projectKey=eevlogiev_devops-telerik
 
     Snyk:
-      name: Snyk vulnerabilities scan
+      name: Snyk security scan
       runs-on: ubuntu-latest
       needs: [unit-test]
       steps:
