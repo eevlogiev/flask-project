@@ -1,6 +1,7 @@
+---
 deployment:
   name: flask-app
-  image: 353591665476.dkr.ecr.us-east-1.amazonaws.com/flask
+  image: 456323302348.dkr.ecr.us-east-1.amazonaws.com/flask
   tag: latest
   replicas: 2
   port: 5000
