@@ -123,11 +123,3 @@ resource "kubernetes_service_account" "dns-account" {
   }
 }
 
-resource "local_file" "helm-values" {
-  content = templatefile("templates/values.yaml.tpl", {
-    account_id = data.aws_caller_identity.current.account_id
-    region     = data.aws_region.current.name
-  })
-
-  filename = "../helm/values.yaml"
-}
