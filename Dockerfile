@@ -6,12 +6,11 @@ RUN mkdir /flask/
 RUN useradd -ms /bin/bash devops_guru
 USER devops_guru
 
-
-COPY requirements.txt /flask/requirements.txt
-RUN pip install -r /flask/requirements.txt
-
 COPY /app /flask/
+COPY requirements.txt /flask/requirements.txt
+
 WORKDIR /flask/
+RUN pip install -r requirements.txt
 
 EXPOSE 5000
 
