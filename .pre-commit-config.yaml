@@ -45,7 +45,6 @@ repos:
         name: Detect hardcoded secrets in repo
         description: Detect hardcoded secrets using Gitleaks
         entry: gitleaks protect --verbose --redact --staged
-        #language: python
         pass_filenames: false
       - id: gitleaks-docker
         name: Detect hardcoded secrets in Docker image
@@ -57,7 +56,7 @@ repos:
     rev: v1.29.0
     hooks:
       - id: yamllint
-        name: yamllint
+        name: Yamllint
         description: This hook runs yamllint.
         entry: yamllint
         language: python
