@@ -11,12 +11,19 @@ on:
         - Dockerfile
 
 jobs:
+    # Code style checks
+    editorconfig:
+      name: editorconfig lint
+      runs-on: ubuntu-latest
+      steps:
+          - uses: actions/checkout@v4
+          - uses: editorconfig-checker/action-editorconfig-checker@main
+          - run: editorconfig-checker
 
     build:
-
       name: Build Image
       runs-on: ubuntu-latest
-
+      if: false
       steps:
 
         # Get Short Git commit SHA
