@@ -3,15 +3,15 @@ kind: Ingress
 metadata:
   name: "{{ .Values.deployment.name }}-ingress"
   annotations:
-     cert-manager.io/cluster-issuer: "acme-issuer-{{ .Values.deployment.env }}"
-   # cert-manager.io/cluster-issuer: acme-issuer
+    cert-manager.io/cluster-issuer: "acme-issuer-{{ .Values.deployment.env }}"
+
 spec:
   ingressClassName: nginx
   rules:
     {{- if eq .Values.deployment.env "prod" }}
-  - host: "{{ .Values.deployment.domain }}"
+    - host: "{{ .Values.deployment.domain }}"
     {{- else }}
-  - host: "{{ .Values.deployment.env }}.{{ .Values.deployment.domain }}"
+    - host: "{{ .Values.deployment.env }}.{{ .Values.deployment.domain }}"
     {{ end }}
     http:
       paths:
