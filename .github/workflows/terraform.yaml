@@ -33,30 +33,36 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ vars.AWS_REGION }}
 
+        # Setup Terraform
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.6.6
 
+        # Terraform fmt
       - name: Terraform fmt
         id: fmt
         run: terraform fmt -check
         continue-on-error: true
-        
+
+        # Terraform Init
       - name: Terraform Init
         id: init
         run: terraform init
 
+        # Terraform Validate
       - name: Terraform Validate
         id: validate
         run: terraform validate -no-color
 
+        # Terraform Plan
       - name: Terraform Plan
         id: plan
         run: terraform plan -no-color
         if: github.event_name == 'pull_request'
         continue-on-error: true
 
+        # Comment on Pull Request with Terraform Plan details
       - uses: actions/github-script@v6
         if: github.event_name == 'pull_request'
         env:
@@ -94,10 +100,12 @@ jobs:
               body: output
             })
 
+        # Terraform Plan Status
       - name: Terraform Plan Status
         if: steps.plan.outcome == 'failure'
         run: exit 1
 
+        # Terraform Apply on push to main branch
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve -input=false
