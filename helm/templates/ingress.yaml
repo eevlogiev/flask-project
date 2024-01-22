@@ -1,3 +1,4 @@
+---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -8,20 +9,20 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    {{- if eq .Values.deployment.env "prod" }}
+    {{ if eq .Values.deployment.env "prod" }}
     - host: "{{ .Values.deployment.domain }}"
     {{- else }}
     - host: "{{ .Values.deployment.env }}.{{ .Values.deployment.domain }}"
     {{ end }}
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: "{{ .Values.deployment.name }}-svc"
-            port:
-              number: {{ .Values.service.port }}
+      http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: "{{ .Values.deployment.name }}-svc"
+              port:
+                number: {{ .Values.service.port }}
   tls:
   - hosts:
       {{- if eq .Values.deployment.env "prod" }}

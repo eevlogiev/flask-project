@@ -22,15 +22,11 @@ repos:
         entry: zricethezav/gitleaks protect --verbose --redact --staged
         language: docker_image
 
-  - repo: https://github.com/adrienverge/yamllint.git
-    rev: v1.29.0
+  - repo: https://github.com/gruntwork-io/pre-commit
+    rev: v0.1.22
     hooks:
-      - id: yamllint
-        name: Yamllint
-        description: This hook runs yamllint.
-        entry: yamllint
-        language: python
-        types: [file, yaml]
+    - id: helmlint
+      name: Helm lint
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.5.0
@@ -44,6 +40,7 @@ repos:
           - '--assume-in-merge'
       - id: check-json
       - id: check-yaml
+        exclude: helm/*
         args:
           - '--allow-multiple-documents'
       - id: trailing-whitespace
