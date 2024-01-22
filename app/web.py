@@ -5,7 +5,8 @@ import os
 
 app = Flask(__name__)
 
-env = os.getenv('ENV')
+env = os.getenv("ENV")
+
 
 @app.route("/")
 def home():
@@ -23,6 +24,7 @@ def home():
 </body>
 </html>
 """
+
 
 if __name__ == "__main__":
     app.run(port=5000, host="0.0.0.0")
