@@ -1,5 +1,5 @@
 resource "helm_release" "cert-manager" {
-  depends_on = [module.eks]
+  depends_on = [kubernetes_service_account.cert-account]
   name       = "cert-manager"
   atomic     = true
   wait       = true
@@ -44,7 +44,7 @@ resource "helm_release" "nginx-ingress" {
 }
 
 resource "helm_release" "external_dns" {
-  depends_on = [module.eks]
+  depends_on = [kubernetes_service_account.dns-account]
   name       = "external-dns"
   chart      = "external-dns"
   repository = "https://charts.bitnami.com/bitnami"
