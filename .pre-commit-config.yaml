@@ -32,7 +32,7 @@ repos:
     rev: v4.5.0
     hooks:
       - id: check-executables-have-shebangs
-        name: Check if executrales have shebangs
+        name: Check if executable files have shebangs
       - id: check-added-large-files
         name: Check for large files
       - id: check-merge-conflict
