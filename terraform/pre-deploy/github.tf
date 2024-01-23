@@ -31,7 +31,7 @@ resource "aws_iam_role" "gha_oidc_assume_role" {
             "token.actions.githubusercontent.com:aud" : "sts.amazonaws.com",
           },
           "StringLike" : {
-            "token.actions.githubusercontent.com:sub" : ["repo:github.com/eevlogiev/telerik-flask-project:*"]
+            "token.actions.githubusercontent.com:sub" : ["repo:eevlogiev/telerik-flask-project:*"]
           }
         }
       }
