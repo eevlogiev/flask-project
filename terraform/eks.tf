@@ -57,6 +57,24 @@ module "eks" {
   ]
 }
 
+resource "aws_iam_role" "role2" {
+  name               = "eks-role"
+  assume_role_policy = <<EOF
+{
+ "Version": "2012-10-17",
+ "Statement": [
+   {
+     "Action": "sts:AssumeRole",
+     "Principal": {
+       "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+     },
+     "Effect": "Allow"
+   }
+ ]
+}
+EOF
+}
+
 module "cert_manager_irsa_role" {
   source                        = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   depends_on                    = [module.eks]
