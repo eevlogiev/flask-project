@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "terraform-bucket" {
-  bucket = "terraform-state-51"
+  bucket = "terraform-state-55"
 
   tags = {
     Name = "S3 Remote Terraform State Store"
