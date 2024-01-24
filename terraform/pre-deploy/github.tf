@@ -52,12 +52,16 @@ resource "aws_iam_role_policy" "gha_oidc_terraform_permissions" {
     Statement = [
       {
         Action = [
+          "iam:*",
+          "logs:*",
           "vpc:*",
           "ecr:*",
           "ec2:*",
           "s3:*",
           "route53:*",
-          "eks:*"
+          "eks:*",
+          "dynamodb:*",
+          "kms:*"
         ]
         Effect   = "Allow"
         Resource = "*"
