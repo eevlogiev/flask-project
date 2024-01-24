@@ -28,6 +28,7 @@ jobs:
 
       - name: Set variables
         run: |
+          pwd && find .
           ROLE_ARN_RUNNER=$(cat terraform/pre-build/role-arn.txt)
           echo "ROLE_ARN=$ROLE_ARN_RUNNER" >> $GITHUB_ENV
         
