@@ -8,6 +8,7 @@ on:
       paths:
         - 'app/**'
         - 'helm/**'
+        - '!helm/values.yaml'
         - Dockerfile
 permissions:
       id-token: write # This is required for requesting the JWT through OIDC
@@ -127,11 +128,18 @@ jobs:
         - name: Check out code
           uses: actions/checkout@v4
 
+        # Set workflow variables
+        - name: Set variables
+          run: |
+            pwd && find .
+            ROLE_ARN_RUNNER=$(cat pre-deploy/role-arn.txt)
+            echo "ROLE_ARN=$ROLE_ARN_RUNNER" >> $GITHUB_ENV
+
         # Configure AWS credentials for authentication
         - name: Configure AWS credentials
           uses: aws-actions/configure-aws-credentials@v4
           with:
-            role-to-assume: arn:aws:iam::248948716107:role/gha_oidc_assume_role
+            role-to-assume: ${{ env.ROLE_ARN }}
             role-session-name: helmdeploy
             aws-region: ${{ vars.AWS_REGION }}
 
