@@ -122,4 +122,3 @@ resource "kubernetes_service_account" "dns-account" {
     }
   }
 }
-
