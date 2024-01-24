@@ -66,7 +66,7 @@ resource "aws_iam_role" "role2" {
    {
      "Action": "sts:AssumeRole",
      "Principal": {
-       "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+       "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/cloud_user"
      },
      "Effect": "Allow"
    }
