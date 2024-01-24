@@ -26,6 +26,7 @@ jobs:
       - name: Git checkout
         uses: actions/checkout@v4
 
+        # Set workflow variables
       - name: Set variables
         run: |
           pwd && find .
