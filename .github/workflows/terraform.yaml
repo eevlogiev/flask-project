@@ -29,7 +29,7 @@ jobs:
       - name: Set variables
         run: |
           pwd && find .
-          ROLE_ARN_RUNNER=$(cat pre-build/role-arn.txt)
+          ROLE_ARN_RUNNER=$(cat pre-deploy/role-arn.txt)
           echo "ROLE_ARN=$ROLE_ARN_RUNNER" >> $GITHUB_ENV
         
         # Configure AWS credentials for authentication
