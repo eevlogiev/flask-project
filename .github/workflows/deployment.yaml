@@ -7,6 +7,7 @@ on:
         - '*'
       paths:
         - 'app/**'
+        - '!helm/values.yaml'
         - 'helm/**'
         - Dockerfile
 permissions:
