@@ -30,9 +30,9 @@ resource "local_file" "deploy-pipeline" {
 */
 data "aws_caller_identity" "current" {}
 
-resource "local_file" "terraform-pipeline" {
-  source               = "templates/terraform.yaml"
-  filename             = "../../.github/workflows/terraform.yaml"
+resource "local_file" "role_arn" {
+  content              =  aws_iam_role.gha_oidc_assume_role.arn
+  filename             = "role-arn.txt"
   file_permission      = "0644"
   directory_permission = "0751"
 }
