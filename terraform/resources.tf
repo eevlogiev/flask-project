@@ -25,7 +25,7 @@ resource "helm_release" "cert-manager" {
 }
 
 resource "helm_release" "nginx-ingress" {
-  depends_on = [module.eks]
+  depends_on = [helm_release.external_dns]
   name       = "nginx-ingress-controller"
   repository = "https://charts.bitnami.com/bitnami"
   chart      = "nginx-ingress-controller"
