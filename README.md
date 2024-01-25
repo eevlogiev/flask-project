@@ -4,7 +4,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/eevlogiev/flask-app">
-    <img src="app/static/devops.png" alt="Logo" width="500" height="250">
+    <img src="app/static/devops.png" alt="Logo" width="400" height="200">
   </a>
 <h2 align="center">Flask App Project</h2>
 </div>
@@ -18,7 +18,7 @@
   <summary>Table of Contents</summary>
   <ol>
     <li>
-      <a href="#about-the-project">About The Project</a>
+      <a href="#about-the-project">Overview</a>
       <ul>
         <li><a href="#tools-and-technologies-used">Tools Used</a></li>
       </ul>
@@ -26,11 +26,15 @@
     <li>
       <a href="#getting-started">Getting Started</a>
       <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#requirements">Requirements</a></li>
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
+      <ul>
+        <li><a href="#requirements">Deploy AWS infrastructure</a></li>
+        <li><a href="#installation">Deploy Flask application</a></li>
+      </ul>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
@@ -39,66 +43,99 @@
 
 
 <!-- ABOUT THE PROJECT -->
-## About The Project
+## Overview
 
-This project uses Terraform to build an environment in AWS (VPC, subnets, EC2 instnces, ECR, IAM roles, etc) and then EKS cluster on top of that. It also creates a Jenkins server where via pipeline Flask application is being deployed. Deployment creates flask application running on NGINX server on Kubernetes pod and K8s addons like external-dns and cert-manager for creating SSL certificates and dynamically updating DNS entries in Route53 for specific domain.
+This project leverages Terraform to provision AWS resources, including VPC components, EC2 instances, Elastic Container Registry (ECR) and IAM roles. Additionally, it orchestrates the deployment of an Amazon Elastic Kubernetes Service (EKS) cluster.
+
+Once the EKS cluster is operational, it hosts a Flask application within NGINX servers orchestrated by Kubernetes pods. To access the web application NGINX ingress controller will be installed. Furthermore, the setup incorporates Kubernetes add-ons such as external-dns and cert-manager. These components facilitate the automatic management of SSL certificates and the dynamic updating of DNS records in Route 53 for a specified domain. 
+
+To add more automation to the process - both deployment of the infrastructure and the application deployment are being handled by Github Actions pipelines.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+### Requirements
 
-### Prerequisites
+* Git and Github account
+* Terraform
+* AWS CLI
+* Registered domain name
+* SOLAR and Snyk accounts
+* AWS user with write privileges to create S3 bucket, DynamoDB table, IAM role, OIDC provider
+* Deploy an [EKS K8 Cluster](https://github.com/eevlogiev/telerik-flask-project) with Self managed Worker nodes on AWS using Terraform.
 
-In order to execute this project user must have AWS account with proper privileges.
 
-Also the following tools and packages must be installed:
-1. AWS CLI
-2. Terraform
-3. Git
-
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 ### Installation
 
-1. Clone the repo
-   ```
-   git clone https://github.com/eevlogiev/telerik-flask-project.git
-   ```
-2. Authenticate to AWS by adding Access key and Secret key:
+1. Fork this github [repo](https://github.com/eevlogiev/telerik-flask-project)
+2. Set repository secrets.
+   In "Secrets and Varibles" setting page of you repository add the following Repository Secrets which you will need further for your pipeline:
+   - `SONAR_TOKEN` - this is the token used to authenticate access to SonarCloud. You can generate a token on your [Security page in SonarCloud](https://sonarcloud.io/account/security/). 
+   - `SNYK_TOKEN` - this token is needed to authenticate to Snyk vulnerability scanner. You can get that token following the instructions in [Snyk documentation](https://docs.snyk.io/integrate-with-snyk/git-repositories-scms-integrations-with-snyk/snyk-github-integration).
+3. Set Repository variables.
+   In "Secrets and Varibles" setting page of you repository add the following Repository Variable which you will need further for your pipeline:
+   - `AWS_REGION` - this is the AWS region where infrastructure will be deployed. For example us-east-1, eu-central-1, etc.
+4. Authenticate to AWS by adding your Access and Secret keys:
    ```
    aws configure
    ```
-3. Deploy initial infrastructure elements - S3 bucket, DynamoDB and Github OIDC provider
+5. Clone the repo locally:
+   ```
+   git clone <forked repo>
+   ```
+6. Create a new branch, for example `dev`:
+   ```
+   git branch dev
+   git checkout dev
+   ```
+7. Deploy initial infrastructure components - S3 bucket, DynamoDB and Github OIDC provider:
    ```
    cd terraform/pre-deploy
+   terraform init
+   terraform plan
    terraform apply
    ```
-5. Point the NS servers for your domain to the Route53 DNS servers
-6. Login to Jenkins on EC2 public IP and port 8080
-7. Configure your Githhub private SSH key in Jenkins
-8. Create MultiBranch Pipeline, pointing to your Github repo and the configured Github credentials
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- USAGE EXAMPLES -->
 ## Usage
 
+### Deploy AWS infrastructure
+AWS infrastructure where Flask application will be running is being provisioned with **terraform** via Github workflow described in `terraform.yaml`. 
+To trigger this Github action, change will be required in the terraform folder. 
+1. Go to any file under terraform folder and simply add a `# comment`
+2. Commit and push your changes to the remote Github repo
+   ```
+   git add <changed files>
+   git commit
+   git push --set-upstream origin dev
+   ```
+3. Create a Pull request to merge the changes from `dev` branch into the `main` branch.
+4. Pull request will trigger the **terraform** Github action. This action will add a comment in the PR with the `terraform plan` results.
+5. Review Pull request, check file changes and `terraform plan` output in the **Conversation** section.
+6. To deploy infrastructure in AWS - after peer review click on **Merge** button.
+7. Go to **Actions** and check the status of the Terraform pipeline. If successful - this workflow will create EKS and all the needed infrastructure in AWS.
+
+### Deploy Flask application
+Update domain name for the web server hosting the Flask application. Change value for domain variable in : `/helm/values.yaml` and replace `ev4o.com` with your registered domain name.
+Point the NS servers for your domain to the Route53 DNS servers
 TBD
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+<!-- LICENSE -->
+## License
+
+Distributed under the GPL-3.0 License. Further information in the [LICENSE](https://github.com/eevlogiev/telerik-flask-project/blob/main/LICENSE) file.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 <!-- CONTACT -->
@@ -111,11 +148,6 @@ Project Link: [https://github.com/eevlogiev/flask-app](https://github.com/eevlog
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
-
-<!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
-
-* [Nik Vaklinov](https://github.com/nvaklinov/nvaklinov)
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
