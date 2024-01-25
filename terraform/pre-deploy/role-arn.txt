@@ -1,1 +1,1 @@
-arn:aws:iam::781156139953:role/gha_oidc_assume_role
+arn:aws:iam::776410366842:role/gha_oidc_assume_role
