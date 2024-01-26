@@ -18,15 +18,13 @@
   <summary>Table of Contents</summary>
   <ol>
     <li>
-      <a href="#about-the-project">Overview</a>
-      <ul>
-        <li><a href="#tools-and-technologies-used">Tools Used</a></li>
-      </ul>
+      <a href="#overview">Overview</a>
     </li>
     <li>
       <a href="#getting-started">Getting Started</a>
       <ul>
-        <li><a href="#requirements">Requirements</a></li>
+        <li><a href="#how-does-it-work">How does it work?</a></li>
+        <li><a href="#prerequisites">Prerequisites</a></li>
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
@@ -54,7 +52,10 @@ To add more automation to the process - both deployment of the infrastructure an
 <!-- GETTING STARTED -->
 ## Getting Started
 
-### Requirements
+### How does it work?
+
+
+### Prerequisites
 
 * Git and Github account
 * Docker
@@ -65,11 +66,9 @@ To add more automation to the process - both deployment of the infrastructure an
 * [SonarCloud](https://www.sonarsource.com/products/sonarcloud/) and [Snyk](https://app.snyk.io) accounts
 * AWS user with write privileges to create S3 bucket, DynamoDB table, IAM role, OIDC provider
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 ### Installation
 
-1. Fork this github [repo](https://github.com/eevlogiev/telerik-flask-project)
+1. Fork this github [repo](https://github.com/eevlogiev/telerik-flask-project).
 2. Set repository secrets.
    In "Secrets and Varibles" setting page of you repository add the following Repository Secrets which you will need further for your pipeline:
    * `SONAR_TOKEN` - this is the token used to authenticate access to SonarCloud. You can generate a token on your [Security page in SonarCloud](https://sonarcloud.io/account/security/).
@@ -122,7 +121,7 @@ To add more automation to the process - both deployment of the infrastructure an
 
 ### Deploy AWS infrastructure
 
-AWS infrastructure needed for the Flask application is being provisioned with **terraform** via Github workflow described in `.github/workflows/terraform.yaml`. This workflow will create VPC, subnets, route-tables, internet gateway, NAT gateway, security groups, ECR, IAM roles, EKS cluster, helm charts, EKS addons which will be needed later for the application.
+AWS infrastructure needed for the Flask application is being provisioned with **terraform** via Github workflow described in `.github/workflows/terraform.yaml`. This workflow will create a VPC, Subnets, Route tables, Internet Gateway, NAT Gateway, Security groups, ECR, IAM roles, EKS cluster, Helm charts, EKS addons which will be needed later for the application.
 This Github action is triggered in case of any change in the `terraform` folder.
 
 1. Update file terraform/locals.tf and replace `ev4o.com` with your registered domain:
@@ -133,7 +132,7 @@ This Github action is triggered in case of any change in the `terraform` folder.
 
    :warning: Make sure to keep the curly brackets!
 
-2. Commit and push your changes to the remote Github repo
+2. Commit and push your changes to the remote Github repo:
 
    ```
    git add <changed files>
@@ -144,29 +143,75 @@ This Github action is triggered in case of any change in the `terraform` folder.
 3. Create a Pull request to merge the changes from `dev` branch into the `main` branch.
 4. Pull request will trigger the **Terraform Infrastructure Change Management Pipeline** Github action. This action will add a comment in the PR with the `terraform plan` output but will NOT execute `terraform apply`.
 5. Review Pull request - check Commits, suggested file changes and the `terraform plan` output in the **Conversation** section of the PR.
-6. To deploy infrastructure in AWS - after peer review click on the **Merge** button in Pull Request Section.
-7. Pushing to main branch (or Merge into main branch) is triggering **Terraform Infrastructure Change Management Pipeline** but this time with `terraform apply` job.
-8. Go to **Actions** and check the status of the Terraform pipeline. If successful - this workflow will create EKS cluster with 2 nodes and all the underlying infrastructure in AWS.
+6. Deploy infrastructure in AWS - after peer review click on the **Merge** button in Pull Request Section.
+7. Pushing changes to main branch (or Merge into main branch) triggers **Terraform Infrastructure Change Management Pipeline** but this time with `terraform apply` job.
+8. Go to **Actions** and check the status of the **Terraform Infrastructure Change Management Pipeline**. If successful - this workflow will create EKS cluster with 2 nodes and all the underlying infrastructure in AWS.
 
 ### Deploy Flask application
 
-Once all underlying infrastructure is provisioned in AWS, you can deploy the Flask application. Again application is being installed via Github Actions workflow described in `.github/workflows/deployment.yaml'. This workflow runs some linters to check code style, then performes Unit testing and
-
+Once all underlying infrastructure is provisioned in AWS, you can deploy the Flask application. Again application is being installed via Github Actions workflow described in `.github/workflows/deployment.yaml'.
+CI/CD Pipeline run the following jobs:
 * Code style checks - EditorConfig, Pylint and Black Python linters
-* Unit testing
+* Unit testing - runs simple unit test calling `test_web.py`
 * Static Application Security Testing (SAST) - SonarCloud and Snyk vulnerability scanners (make sure you have SONAR_TOKEN and SNYK_TOKEN set in your Repository Secrets first!)
-* Build Docker image
+* Build Docker image and tag it with the current Commit hash
 * Push Docker image to AWS ECR
-* Deploy application with helm chart
+* Deploy application by using helm chart
 
+CI/CD Pipeline is being triggered by any change in the folloing locations:
+* `/app` folder
+* `/helm` folder
+* `Dockerfile`
+  
+#### Deploy to Dev environment
 1. Update domain name for the web server hosting the Flask application. Change value for domain variable in : `/helm/values.yaml` and replace `ev4o.com` with your registered domain name:
 
 ```
 domain = <your domain>
 ```
+2. Point the NS servers for your domain to the Route53 DNS servers.
+Get the NS records for your AWS hosted zone:
+```
+aws route53 list-hosted-zones-by-name
+aws route53 get-hosted-zone --id <hosted zone id>
+```
+3. Go to the Domain registrar (like GoDaddy.com) for your domain and configure the NameServers entries listed in the previous step as Nameservers for your domain:
+<img src="images/nameservers.png" alt="NameServers" width="120" height="60">
+From now on all DNS queries for your registered domain will be handled by AWS Route 53.
 
-Point the NS servers for your domain to the Route53 DNS servers
-TBD
+4. Commit and push your changes to the remote Github repo:
+
+   ```
+   git add <changed files>
+   git commit
+   git push
+   ```
+5. Pushing to `dev` branch will trigger the CI/CD Pipeline. If all previous steps are completed successfully, application will be deployed in `dev` environment
+6. Verify application deployment:
+   ```
+   aws eks update-kubeconfig --name flask-cluster --region <AWS region>
+   source terraform/pre-deploy/assume_role.sh
+   kubectl get pods -n dev
+   kubectl get ingress -n dev
+   kubectl get svc -n kube-system
+   ```
+8. Successfull deployment will install a helm chart which creates 2 pods in `dev` namespace where NGINX server will be running, NGINX ingress controller in `dev` namespace, LoadBalancer service in `dev` namespace. It will also request and install SSL certificate for dev.<your domain> and add a DNS record for dev.<your domain> in Route 53.
+9. Open dev.<your domain> in your browser and you should get to the landing page of Dev environment.
+
+#### Deploy to Production environment
+1. Create a Pull request to merge the changes from `dev` branch into the `main` branch.
+2. If you are happy with the result, just review the PR and click on **Merge** to merge `dev` into `main` branch.
+3. Merging to `main` branch will trigger again the CI/CD Pipeline. If all previous steps are completed successfully, application will be deployed in `prod` environment
+4. Verify application deployment:
+   ```
+   kubectl get pods -n prod
+   kubectl get ingress -n prod
+   kubectl get svc -n kube-system
+   ```
+8. Successfull deployment will install a helm chart which creates 2 pods in `prod` namespace where NGINX server will be running, NGINX ingress controller in `prod` namespace, LoadBalancer service in `prod` namespace. It will also request and install SSL certificate for <your domain> and add a DNS record for <your domain> in Route 53.
+9. Open <your domain> in your browser and you should get to the landing page of Prod environment.
+
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -182,9 +227,7 @@ Distributed under the GPL-3.0 License. Further information in the [LICENSE](http
 
 Evelin Evlogiev - [![LinkedIn][linkedin-shield]][linkedin-url]
 
-Project Link: [https://github.com/eevlogiev/flask-app](https://github.com/eevlogiev/flask-app)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+Project Link: [https://github.com/eevlogiev/telerik-flask-project](https://github.com/eevlogiev/telerik-flask-project)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
