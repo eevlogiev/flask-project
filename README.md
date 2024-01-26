@@ -219,7 +219,7 @@ From now on all DNS queries for your registered domain will be handled by AWS Ro
 <!-- CONTACT -->
 ## Contact
 
-[Evelin Evlogiev](https://www.linkedin.com/in/sivanandammanickavasagam](https://www.linkedin.com/in/e-evlogiev/)
+[Evelin Evlogiev](https://www.linkedin.com/in/e-evlogiev/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
