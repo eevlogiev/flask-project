@@ -25,3 +25,6 @@ indent_size = 2
 [*.{md,Rmd,rst}]
 indent_style = space
 indent_size = 2
+
+# Ignore paths
+[README.md]
