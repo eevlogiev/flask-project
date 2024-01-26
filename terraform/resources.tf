@@ -72,7 +72,7 @@ resource "helm_release" "external_dns" {
 
   set {
     name  = "domainFilters"
-    value = "{ev4o.com}"
+    value = local.domain
   }
 
   set {
