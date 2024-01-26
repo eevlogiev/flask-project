@@ -32,9 +32,14 @@
       <ul>
         <li><a href="#deploy-aws">Deploy AWS infrastructure</a></li>
         <li><a href="#deploy-flask">Deploy Flask application</a></li>
+          <ul>
+            <li><a href="#deploy-dev">Deploy to Dev environment</a></li>
+            <li><a href="#deploy-prod">Deploy to Production environment</a></li>
+          </ul>
       </ul>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#version-history">Version History</a></li>
     <li><a href="#license">License</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
 
@@ -211,7 +216,18 @@ From now on all DNS queries for your registered domain will be handled by AWS Ro
 8. Successfull deployment will install a helm chart which creates 2 pods in `prod` namespace where NGINX server will be running, NGINX ingress controller in `prod` namespace, LoadBalancer service in `prod` namespace. It will also request and install SSL certificate for <your domain> and add a DNS record for <your domain> in Route 53.
 9. Open <your domain> in your browser and you should get to the landing page of Prod environment.
 
+<!-- CONTACT -->
+## Contact
 
+[Evelin Evlogiev](https://www.linkedin.com/in/sivanandammanickavasagam](https://www.linkedin.com/in/e-evlogiev/)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- Version History -->
+## Version History
+
+* 0.1
+    * Initial Release
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -219,15 +235,6 @@ From now on all DNS queries for your registered domain will be handled by AWS Ro
 ## License
 
 Distributed under the GPL-3.0 License. Further information in the [LICENSE](https://github.com/eevlogiev/telerik-flask-project/blob/main/LICENSE) file.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- CONTACT -->
-## Contact
-
-Evelin Evlogiev - [![LinkedIn][linkedin-shield]][linkedin-url]
-
-Project Link: [https://github.com/eevlogiev/telerik-flask-project](https://github.com/eevlogiev/telerik-flask-project)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
