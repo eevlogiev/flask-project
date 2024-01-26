@@ -11,5 +11,5 @@ locals {
   vpc_cidr      = "10.0.0.0/16"
   instance_type = "t2.medium"
   account_id    = data.aws_caller_identity.current.account_id
-  domain        = "ev4o.com"
+  domain        = "{ev4o.com}"
 }
