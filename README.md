@@ -30,11 +30,11 @@
     </li>
     <li><a href="#usage">Usage</a></li>
       <ul>
-        <li><a href="#deploy-aws">Deploy AWS infrastructure</a></li>
-        <li><a href="#deploy-flask">Deploy Flask application</a></li>
+        <li><a href="#deploy-aws-infrastructure">Deploy AWS infrastructure</a></li>
+        <li><a href="#deploy-flask-application">Deploy Flask application</a></li>
           <ul>
-            <li><a href="#deploy-dev">Deploy to Dev environment</a></li>
-            <li><a href="#deploy-prod">Deploy to Production environment</a></li>
+            <li><a href="#deploy-to-development-environment">Deploy to Development environment</a></li>
+            <li><a href="#deploy-to-production-environment">Deploy to Production environment</a></li>
           </ul>
       </ul>
     <li><a href="#contact">Contact</a></li>
@@ -168,7 +168,7 @@ CI/CD Pipeline is being triggered by any change in the folloing locations:
 * `/helm` folder
 * `Dockerfile`
   
-#### Deploy to Dev environment
+#### Deploy to Development environment
 1. Update domain name for the web server hosting the Flask application. Change value for domain variable in : `/helm/values.yaml` and replace `ev4o.com` with your registered domain name:
 
 ```
