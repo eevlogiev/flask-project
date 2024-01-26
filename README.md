@@ -13,6 +13,7 @@
       
 [![AWS][AWS]][AWS-url][![Terraform][Terraform]][Terraform-url][![Docker][Docker]][Docker-url][![Kubernetes][Kubernetes]][Kubernetes-url][![Helm][Helm]][Helm-url][![Python][Python]][Python-url][![Flask][Flask]][Flask-url][![Nginx][Nginx]][Nginx-url]
 
+
 <!-- TABLE OF CONTENTS -->
 <details>
   <summary>Table of Contents</summary>
@@ -32,10 +33,10 @@
     </li>
     <li><a href="#usage">Usage</a></li>
       <ul>
-        <li><a href="#requirements">Deploy AWS infrastructure</a></li>
-        <li><a href="#installation">Deploy Flask application</a></li>
+        <li><a href="#deploy-aws">Deploy AWS infrastructure</a></li>
+        <li><a href="#deploy-flask">Deploy Flask application</a></li>
       </ul>
-    <li><a href="#contact">Contact</a></li>
+    <li><a href="#license">License</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
@@ -59,13 +60,13 @@ To add more automation to the process - both deployment of the infrastructure an
 ### Requirements
 
 * Git and Github account
+* Docker
 * Terraform
+* Pre-commit hooks - tflint, helm lint
 * AWS CLI
 * Registered domain name
-* SOLAR and Snyk accounts
+* [SonarCloud](https://www.sonarsource.com/products/sonarcloud/) and [Snyk](https://app.snyk.io) accounts
 * AWS user with write privileges to create S3 bucket, DynamoDB table, IAM role, OIDC provider
-* Deploy an [EKS K8 Cluster](https://github.com/eevlogiev/telerik-flask-project) with Self managed Worker nodes on AWS using Terraform.
-
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -100,7 +101,13 @@ To add more automation to the process - both deployment of the infrastructure an
    terraform plan
    terraform apply
    ```
-
+8. After successul terraform run the following files will be updated with the present AWS account id:
+   ```
+   helm/values.yaml
+   terraform/pre-deploy/assume_role.sh
+   terraform/pre-deploy/role-arn.txt
+   ```
+   These files will be needed later during the deployment process.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
@@ -108,9 +115,14 @@ To add more automation to the process - both deployment of the infrastructure an
 ## Usage
 
 ### Deploy AWS infrastructure
-AWS infrastructure where Flask application will be running is being provisioned with **terraform** via Github workflow described in `terraform.yaml`. 
-To trigger this Github action, change will be required in the terraform folder. 
-1. Go to any file under terraform folder and simply add a `# comment`
+AWS infrastructure needed for the Flask application is being provisioned with **terraform** via Github workflow described in `.github/workflows/terraform.yaml`. This workflow will create VPC, subnets, route-tables, internet gateway, NAT gateway, security groups, ECR, IAM roles, EKS cluster, helm charts, EKS addons which will be needed later for the application.
+This Github action is triggered in case of any change in the `terraform` folder.
+1. Update file terraform/locals.tf and replace `ev4o.com` with your registered domain:
+    ```
+     domain = "{<your domain>}"
+    ```
+   :warning: Make sure to keep the curly brackets!
+
 2. Commit and push your changes to the remote Github repo
    ```
    git add <changed files>
@@ -118,13 +130,24 @@ To trigger this Github action, change will be required in the terraform folder.
    git push --set-upstream origin dev
    ```
 3. Create a Pull request to merge the changes from `dev` branch into the `main` branch.
-4. Pull request will trigger the **terraform** Github action. This action will add a comment in the PR with the `terraform plan` results.
-5. Review Pull request, check file changes and `terraform plan` output in the **Conversation** section.
-6. To deploy infrastructure in AWS - after peer review click on **Merge** button.
-7. Go to **Actions** and check the status of the Terraform pipeline. If successful - this workflow will create EKS and all the needed infrastructure in AWS.
+4. Pull request will trigger the **Terraform Infrastructure Change Management Pipeline** Github action. This action will add a comment in the PR with the `terraform plan` output but will NOT execute `terraform apply`.
+5. Review Pull request - check Commits, suggested file changes and the `terraform plan` output in the **Conversation** section of the PR.
+6. To deploy infrastructure in AWS - after peer review click on the **Merge** button in Pull Request Section.
+7. Pushing to main branch (or Merge into main branch) is triggering **Terraform Infrastructure Change Management Pipeline** but this time with `terraform apply` job.
+8. Go to **Actions** and check the status of the Terraform pipeline. If successful - this workflow will create EKS cluster with 2 nodes and all the underlying infrastructure in AWS.
 
 ### Deploy Flask application
-Update domain name for the web server hosting the Flask application. Change value for domain variable in : `/helm/values.yaml` and replace `ev4o.com` with your registered domain name.
+Once all underlying infrastructure is provisioned in AWS, you can deploy the Flask application. Again application is being installed via Github Actions workflow described in `.github/workflows/deployment.yaml'. This workflow runs some linters to check code style, then performes Unit testing and 
+* Code style checks - EditorConfig, Pylint and Black Python linters
+* Unit testing
+* Static Application Security Testing (SAST) - SonarCloud and Snyk vulnerability scanners (make sure you have SONAR_TOKEN and SNYK_TOKEN set in your Repository Secrets first!)
+* Build Docker image
+* Push Docker image to AWS ECR
+* Deploy application with helm chart
+1. Update domain name for the web server hosting the Flask application. Change value for domain variable in : `/helm/values.yaml` and replace `ev4o.com` with your registered domain name:
+```
+domain = <your domain>
+```
 Point the NS servers for your domain to the Route53 DNS servers
 TBD
 
