@@ -7,6 +7,7 @@ deployment:
   port: 5000
   env: prod
   domain: ev4o.com
+  email: erumenov@abv.bg
   region: us-east-1
 
 service:
