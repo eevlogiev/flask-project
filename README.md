@@ -227,7 +227,7 @@ From now on all DNS queries for your registered domain will be handled by AWS Ro
 8. Successfull deployment will install a helm chart which creates 2 pods in `dev` namespace where NGINX server will be running, NGINX ingress controller in `dev` namespace, LoadBalancer service in `dev` namespace. It will also request and install SSL certificate for dev.<your domain> and add a DNS record for dev.<your domain> in Route 53.
 9. Open dev.<your domain> in your browser and you should get to the landing page of Dev environment.
 
-<img src="images/dev.png" alt="Dev Environment">
+<img src="images/dev.png" alt="Dev Environment" width="700" height="400">>
 
 
 #### Deploy to Production environment
@@ -242,6 +242,13 @@ From now on all DNS queries for your registered domain will be handled by AWS Ro
    ```
 8. Successfull deployment will install a helm chart which creates 2 pods in `prod` namespace where NGINX server will be running, NGINX ingress controller in `prod` namespace, LoadBalancer service in `prod` namespace. It will also request and install SSL certificate for <your domain> and add a DNS record for <your domain> in Route 53.
 9. Open <your domain> in your browser and you should get to the landing page of Prod environment.
+
+<!-- CONTACT -->
+## Contact
+
+[Evelin Evlogiev](https://www.linkedin.com/in/e-evlogiev/)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- Version History -->
 ## Version History
