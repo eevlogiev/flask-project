@@ -57,6 +57,12 @@ Once the EKS cluster is operational, it hosts a Flask application within NGINX s
 
 To add more automation to the process - both deployment of the infrastructure and the application deployment are being handled by Github Actions pipelines.
 
+##
+:warning: **Disclaimer:**
+This project serves as a demonstration of deployment procedures and is intended solely for testing and learning purposes. It is not recommended for production use.
+
+Please note that deploying this project may incur costs that are not covered by the AWS free tier. We advise using the [AWS pricing calculator](https://calculator.aws/#/estimate) to estimate potential expenses before proceeding.
+##
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- GETTING STARTED -->
