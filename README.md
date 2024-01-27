@@ -7,12 +7,11 @@
     <img src="app/static/devops.png" alt="Logo" width="400" height="200">
   </a>
 <h2 align="center">Flask Application Project</h2>
-</div>
-      <br />
-      <br />
 
 [![AWS][AWS]][AWS-url][![Terraform][Terraform]][Terraform-url][![Docker][Docker]][Docker-url][![Kubernetes][Kubernetes]][Kubernetes-url][![Helm][Helm]][Helm-url][![Python][Python]][Python-url][![Flask][Flask]][Flask-url][![Nginx][Nginx]][Nginx-url]
-
+</div>
+<br />
+<br />
 <!-- TABLE OF CONTENTS -->
 <details>
   <summary>Table of Contents</summary>
