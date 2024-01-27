@@ -71,6 +71,10 @@ Please note that deploying this project may incur costs that are not covered by 
 
 This GitHub repository utilizes GitHub Actions for triggering Terraform deployments to AWS. Once Terraform successfully creates all the necessary underlying infrastructure, a Flask application is deployed via a CI/CD Pipeline.
 
+<div align="center">
+<img src="images/diagram.png" alt="Proect Diagram" width="500" height="700">
+</div>
+
 #### 1. Kubernetes Namespace Deployment
 
 To enhance security and maintain separation, the application is deployed within a dedicated Kubernetes namespace ("Environment") based on the current Git branch where changes are pushed. For instance, commits made to the `dev` branch trigger the creation of Kubernetes pods within the `dev` namespace.
