@@ -63,25 +63,29 @@ To add more automation to the process - both deployment of the infrastructure an
 ## Getting Started
 
 ### How does it work?
+
 This GitHub repository utilizes GitHub Actions for triggering Terraform deployments to AWS. Once Terraform successfully creates all the necessary underlying infrastructure, a Flask application is deployed via a CI/CD Pipeline.
 
 #### 1. Kubernetes Namespace Deployment
+
 To enhance security and maintain separation, the application is deployed within a dedicated Kubernetes namespace ("Environment") based on the current Git branch where changes are pushed. For instance, commits made to the `dev` branch trigger the creation of Kubernetes pods within the `dev` namespace.
 
 #### 2. Deployment Components
+
 The Flask app deployment process involves the creation of essential components:
+
 * **NGINX Servers:** Two NGINX server pods are deployed to host the Flask application.
 * **NGINX Ingress Controller:** Responsible for handling incoming HTTP requests, redirecting them to HTTPS, and routing requests to the appropriate ClusterIP service based on the URL path.
 * **LoadBalancer Service:** Creates classic AWS Loadbalancer, vital part of the NGINX controller
 * **ClusterIP Service:** Exposes port 80 and forwards incoming connections to the respective pods located in specific namespaces based on the `Environment` variable.
 * **External-DNS Addon:** Creates a DNS A record in Route 53 based on the `Environment` variable: <`Environment`>.<your-domain.name>
 * **Certificate Manager:** Manages the creation and installation of SSL certificates via the third-party SSL Provider [Let's Encrypt](https://letsencrypt.org/) for <`Environment`>.<your-domain.name>.
-  
+
 For example if changes are being committed to `Dev` branch, pipeline will create pods, NGINX ingress controller and ClusterIP service in `dev` namespace in Kubernetes cluster. Also External-DNS addon will create an A record for `dev`.<your-domain.name> and SSL certificate will be installed for `dev`.<your-domain.name>.
 
 #### 3. Flask Application Behavior
-The Flask application dynamically visualizes the Environment variable on the screen. For instance, if changes are committed to the dev branch, accessing `dev`.<your-domain.name> in a browser will confirm connection to the Dev environment.
 
+The Flask application dynamically visualizes the Environment variable on the screen. For instance, if changes are committed to the dev branch, accessing `dev`.<your-domain.name> in a browser will confirm connection to the Dev environment.
 
 ### Prerequisites
 
@@ -180,6 +184,7 @@ This Github action is triggered in case of any change in the `terraform` folder.
 
 Once all underlying infrastructure is provisioned in AWS, you can deploy the Flask application. Again application is being installed via Github Actions workflow described in `.github/workflows/deployment.yaml'.
 CI/CD Pipeline run the following jobs:
+
 * Code style checks - EditorConfig, Pylint and Black Python linters
 * Unit testing - runs simple unit test calling `test_web.py`
 * Static Application Security Testing (SAST) - SonarCloud and Snyk vulnerability scanners (make sure you have SONAR_TOKEN and SNYK_TOKEN set in your Repository Secrets first!)
@@ -188,24 +193,30 @@ CI/CD Pipeline run the following jobs:
 * Deploy application by using helm chart
 
 CI/CD Pipeline is being triggered by any change in the folloing locations:
+
 * `/app` folder
 * `/helm` folder
 * `Dockerfile`
-  
+
 #### Deploy to Development environment
+
 1. Update domain name for the web server hosting the Flask application. Change value for domain variable in : `/helm/values.yaml` and replace `ev4o.com` with your registered domain name:
 
 ```
 domain = <your domain>
 ```
+
 2. Point the NS servers for your domain to the Route53 DNS servers.
 Get the NS records for your AWS hosted zone:
+
 ```
 aws route53 list-hosted-zones-by-name
 aws route53 get-hosted-zone --id <hosted zone id>
 ```
+
 3. Go to the Domain registrar (like GoDaddy.com) for your domain and configure the NameServers entries listed in the previous step as Nameservers for your domain:
 <img src="images/nameservers.png" alt="NameServers">
+
 From now on all DNS queries for your registered domain will be handled by AWS Route 53.
 
 4. Commit and push your changes to the remote Github repo:
@@ -215,8 +226,10 @@ From now on all DNS queries for your registered domain will be handled by AWS Ro
    git commit
    git push
    ```
+
 5. Pushing to `dev` branch will trigger the CI/CD Pipeline. If all previous steps are completed successfully, application will be deployed in `dev` environment
 6. Verify application deployment:
+
    ```
    aws eks update-kubeconfig --name flask-cluster --region <AWS region>
    source terraform/pre-deploy/assume_role.sh
@@ -224,22 +237,25 @@ From now on all DNS queries for your registered domain will be handled by AWS Ro
    kubectl get ingress -n dev
    kubectl get svc -n kube-system
    ```
+
 8. Successfull deployment will install a helm chart which creates 2 pods in `dev` namespace where NGINX server will be running, NGINX ingress controller in `dev` namespace, LoadBalancer service in `dev` namespace. It will also request and install SSL certificate for dev.<your domain> and add a DNS record for dev.<your domain> in Route 53.
 9. Open dev.<your domain> in your browser and you should get to the landing page of Dev environment.
 
 <img src="images/dev.png" alt="Dev Environment" width="700" height="400">>
 
-
 #### Deploy to Production environment
+
 1. Create a Pull request to merge the changes from `dev` branch into the `main` branch.
 2. If you are happy with the result, just review the PR and click on **Merge** to merge `dev` into `main` branch.
 3. Merging to `main` branch will trigger again the CI/CD Pipeline. If all previous steps are completed successfully, application will be deployed in `prod` environment
 4. Verify application deployment:
+
    ```
    kubectl get pods -n prod
    kubectl get ingress -n prod
    kubectl get svc -n kube-system
    ```
+
 8. Successfull deployment will install a helm chart which creates 2 pods in `prod` namespace where NGINX server will be running, NGINX ingress controller in `prod` namespace, LoadBalancer service in `prod` namespace. It will also request and install SSL certificate for <your domain> and add a DNS record for <your domain> in Route 53.
 9. Open <your domain> in your browser and you should get to the landing page of Prod environment.
 
@@ -254,7 +270,7 @@ From now on all DNS queries for your registered domain will be handled by AWS Ro
 ## Version History
 
 * 0.1
-    * Initial Release
+  * Initial Release
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -268,8 +284,6 @@ Distributed under the GPL-3.0 License. Further information in the [LICENSE](http
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://www.linkedin.com/in/e-evlogiev/
 [AWS]: https://img.shields.io/badge/AWS-FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white
 [AWS-url]: https://aws.amazon.com/
 [Terraform]: https://img.shields.io/badge/terraform-%235835CC.svg?style=for-the-badge&logo=terraform&logoColor=white
