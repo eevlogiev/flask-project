@@ -169,10 +169,8 @@ This Github action is triggered in case of any change in the `terraform` folder.
 1. Update file terraform/locals.tf and replace `ev4o.com` with your registered domain:
 
     ```
-     domain = "{<your domain>}"
+     domain = "<your domain>"
     ```
-
-   :warning: Make sure to keep the curly brackets!
 
 2. Commit and push your changes to the remote Github repo:
 
@@ -209,10 +207,11 @@ CI/CD Pipeline is being triggered by any change in the folloing locations:
 
 #### Deploy to Development environment
 
-1. Update domain name for the web server hosting the Flask application. Change value for domain variable in : `/helm/values.yaml` and replace `ev4o.com` with your registered domain name:
+1. Update file `/helm/values.yaml` and replace domain and email variables with your registered domain name and your email address:
 
 ```
 domain = <your domain>
+email  = <your email>
 ```
 
 2. Point the NS servers for your domain to the Route53 DNS servers.
