@@ -5,7 +5,7 @@ resource "helm_release" "cert-manager" {
   wait       = true
   repository = "https://charts.jetstack.io"
   chart      = "cert-manager"
-  version    = "v1.13.0"
+  version    = "v1.13.3"
   namespace  = "kube-system"
 
   set {
