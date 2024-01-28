@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket         = "terraform-state-55"
+    bucket         = "terraform-state-50"
     key            = "terraform.tfstate"
     region         = "us-east-1"
     dynamodb_table = "terraform-state"
