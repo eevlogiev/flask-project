@@ -85,7 +85,7 @@ The Flask app deployment process involves the creation of essential components:
 
 * **NGINX Servers:** Two NGINX server pods are deployed to host the Flask application.
 * **NGINX Ingress Controller:** Responsible for handling incoming HTTP requests, redirecting them to HTTPS, and routing requests to the appropriate ClusterIP service based on the URL path.
-* **LoadBalancer Service:** Creates classic AWS Loadbalancer, vital part of the NGINX controller
+* **LoadBalancer Service:** Creates classic AWS Loadbalancer, vital part of the NGINX controller.
 * **ClusterIP Service:** Exposes port 80 and forwards incoming connections to the respective pods located in specific namespaces based on the `Environment` variable.
 * **External-DNS Addon:** Creates a DNS A record in Route 53 based on the `Environment` variable: <`Environment`>.<your-domain.name>
 * **Certificate Manager:** Manages the creation and installation of SSL certificates via the third-party SSL Provider [Let's Encrypt](https://letsencrypt.org/) for <`Environment`>.<your-domain.name>.
@@ -166,7 +166,7 @@ The Flask application dynamically visualizes the Environment variable on the scr
 AWS infrastructure needed for the Flask application is being provisioned with **terraform** via Github workflow described in `.github/workflows/terraform.yaml`. This workflow will create a VPC, Subnets, Route tables, Internet Gateway, NAT Gateway, Security groups, ECR, IAM roles, EKS cluster, Helm charts, EKS addons which will be needed later for the application.
 This Github action is triggered in case of any change in the `terraform` folder.
 
-1. Update file terraform/locals.tf and replace `ev4o.com` with your registered domain:
+1. Update file `terraform/locals.tf` and replace `ev4o.com` with your registered domain:
 
     ```
      domain = "<your domain>"
@@ -213,7 +213,11 @@ CI/CD Pipeline is being triggered by any change in the folloing locations:
 domain = <your domain>
 email  = <your email>
 ```
-
+2. Update file `/.github/workflows/development` and configure SonarCloud Organization and Projectkey as following:
+```
+-Dsonar.organization=<your organization>
+-Dsonar.projectKey=<your project>
+```
 2. Point the NS servers for your domain to the Route53 DNS servers.
 Get the NS records for your AWS hosted zone:
 
