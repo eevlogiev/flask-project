@@ -4,8 +4,8 @@ metadata:
   name: "acme-issuer-{{ .Values.deployment.env }}"
 spec:
   acme:
-    email: erumenov@abv.bg
-    server: https://acme-v02.api.letsencrypt.or/directory
+    email: {{ .Values.deployment.email }}
+    server: https://acme-v02.api.letsencrypt.org/directory
     privateKeySecretRef:
       name: private-key
     solvers:
