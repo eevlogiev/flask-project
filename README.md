@@ -189,7 +189,7 @@ This Github action is triggered in case of any change in the `terraform` folder.
 
 ### Deploy Flask application
 
-Once all underlying infrastructure is provisioned in AWS, you can deploy the Flask application. Again application is being installed via Github Actions workflow described in `.github/workflows/deployment.yaml'.
+Once all underlying infrastructure is provisioned in AWS, you can deploy the Flask application. Again application is being installed via Github Actions workflow described in `.github/workflows/deployment.yaml`.
 CI/CD Pipeline run the following jobs:
 
 * Code style checks - EditorConfig, Pylint and Black Python linters
