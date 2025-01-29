@@ -3,7 +3,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/eevlogiev/flask-app">
+  <a href="https://github.com/eevlogiev/flask-project">
     <img src="app/static/devops.png" alt="Logo" width="400" height="200">
   </a>
 <h2 align="center">Flask Application Project</h2>
